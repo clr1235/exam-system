@@ -78,6 +78,7 @@
       "<rootDir>/libs/"
     ],
     "moduleNameMapper": {
+      "^@app/prisma(|/.*)$": "<rootDir>/libs/prisma/src/$1",
       "^@app/redis(|/.*)$": "<rootDir>/libs/redis/src/$1"
     }
   }
