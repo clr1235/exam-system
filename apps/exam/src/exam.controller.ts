@@ -1,5 +1,6 @@
 import { Controller, Get } from '@nestjs/common';
 import { ExamService } from './exam.service';
+import { MessagePattern } from '@nestjs/microservices';
 
 @Controller()
 export class ExamController {
@@ -8,5 +9,10 @@ export class ExamController {
   @Get()
   getHello(): string {
     return this.examService.getHello();
+  }
+
+  @MessagePattern('sum')
+  sum(numArr: Array<number>): number {
+    return numArr.reduce((pre, cur) => pre + cur, 0);
   }
 }
