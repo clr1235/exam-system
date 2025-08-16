@@ -8,11 +8,15 @@ import {
   Delete,
   Inject,
   Query,
+  SetMetadata,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { RegisterUserDto } from './dto/register-user.dto';
 import { RedisService } from '@app/redis';
 import { EmailService } from '@app/email';
+import { LoginUserDto } from './dto/login-user.dto';
+import { JwtService } from '@nestjs/jwt';
+import { RequireLogin, UserInfo } from '@app/common';
 
 @Controller('user')
 export class UserController {
@@ -23,6 +27,9 @@ export class UserController {
 
   @Inject(EmailService)
   private emailService: EmailService;
+
+  @Inject(JwtService)
+  private jwtService: JwtService;
 
   @Post('register')
   async register(@Body() registerUser: RegisterUserDto) {
@@ -45,5 +52,32 @@ export class UserController {
     });
 
     return '验证码发送成功';
+  }
+
+  @Post('login')
+  async login(@Body() loginUser: LoginUserDto) {
+    const user = await this.userService.login(loginUser);
+
+    return {
+      user,
+      token: this.jwtService.sign(
+        { userId: user.id, username: user.username },
+        {
+          expiresIn: '7d',
+        },
+      ),
+    };
+  }
+
+  @Get('aaa')
+  @RequireLogin()
+  aaa(@UserInfo() userInfo, @UserInfo('username') username) {
+    console.log(userInfo, '--->>>', username);
+    return 'aaa';
+  }
+
+  @Get('bbb')
+  bbb() {
+    return 'bbb';
   }
 }
