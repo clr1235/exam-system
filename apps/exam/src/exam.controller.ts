@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Inject, Param, Post, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Inject,
+  Param,
+  Post,
+  Query,
+} from '@nestjs/common';
 import { ExamService } from './exam.service';
 import { MessagePattern } from '@nestjs/microservices';
 import { RedisService } from '@app/redis';
@@ -52,5 +60,17 @@ export class ExamController {
   @RequireLogin()
   async publish(@UserInfo('userId') userId: number, @Param('id') id: number) {
     return this.examService.publish(userId, +id);
+  }
+
+  @Post('unpublish/:id')
+  @RequireLogin()
+  async unpublish(@UserInfo('userId') userId: number, @Param('id') id: number) {
+    return this.examService.unpublish(userId, +id);
+  }
+
+  @Get('find/:id')
+  @RequireLogin()
+  async find(@Param('id') id: string) {
+    return this.examService.find(+id);
   }
 }
