@@ -30,6 +30,12 @@
       "@app/email/*": [
         "libs/email/src/*"
       ],
+      "@app/excel": [
+        "libs/excel/src"
+      ],
+      "@app/excel/*": [
+        "libs/excel/src/*"
+      ],
       "@app/prisma": [
         "libs/prisma/src"
       ],
